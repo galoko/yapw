@@ -1,0 +1,23 @@
+{
+  "name": "yapw",
+  "version": "1.0.0",
+  "description": "Yet another promised websocket.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galoko/yapw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galoko/yapw/issues"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/galoko/yapw#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
