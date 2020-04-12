@@ -6,7 +6,7 @@ e.g.
 
 ```
 const socket = new PromisedWebsocket();
-await socket.open('ws://test.com');
+await socket.open('wss://echo.websocket.org');
 await socket.send('ping');
 const pong = await socket.recv();
 ```
