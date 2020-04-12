@@ -12,6 +12,11 @@ export default class PromisedWebsocket {
 	
 	public async open(url: string, timeout: number, protocols: string | string[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
+            if (this.socket !== null) {
+                reject('Socket is already open.');
+                return;
+            }
+            
             this.resolve = resolve;
             this.reject = reject;
 
@@ -43,17 +48,14 @@ export default class PromisedWebsocket {
                 reject('Another promise is pending.');
                 return;
             }
-
-            this.resolve = resolve;
-            this.reject = reject;
-
             if (this.socket === null || this.socket.readyState !== 1) {
-				this.resolve = EMPTY_FUNCTION;
-                this.reject('Not connected.');
+                reject('Socket is not open.');
                 return;
             }
 
-            this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(e), timeout);
+            this.resolve = resolve;
+            this.reject = reject;
+            this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
 
             this.processRecv();
 		});
@@ -63,6 +65,7 @@ export default class PromisedWebsocket {
 		return new Promise<any>((resolve, reject: any) : void => {
             if (this.socket !== null) {
                 this.socket.close();
+                this.socket = null;
             }
 
             resolve();
