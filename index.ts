@@ -123,11 +123,11 @@ export default class PromisedWebsocket {
 
     private onTimeout(): void {
 		this.resolve = EMPTY_FUNCTION;
-        this.reject('Timeout.');
+        this.reject('Operation timeout.');
     }
 
     private onClose(): void {
 		this.resolve = EMPTY_FUNCTION;
-        this.reject('Closed.');
+        this.reject('Socket was disconnected.');
     }
 }
