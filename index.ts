@@ -32,7 +32,7 @@ export default class PromisedWebsocket {
             if (timeout === undefined) {
                 timeout = this.defaultTimeout;
             }
-            if (timeout !== undefined) {
+            if (timeout > 0) {
                 this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
             }
         });
@@ -69,7 +69,7 @@ export default class PromisedWebsocket {
             if (timeout === undefined) {
                 timeout = this.defaultTimeout;
             }
-            if (timeout !== undefined) {
+            if (timeout > 0) {
                 this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
             }
 
