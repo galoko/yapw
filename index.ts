@@ -6,11 +6,15 @@ export default class PromisedWebsocket {
 	private timeoutTimer: any = null;
     private resolve: Function = EMPTY_FUNCTION;
     private reject: Function = EMPTY_FUNCTION;
+    private defaultTimeout: number = 0;
 
-	PromisedWebsocket() {
+	PromisedWebsocket(defaultTimeout?: number) {
+        if (defaultTimeout !== undefined) {
+            this.defaultTimeout = defaultTimeout;
+        }
 	}
 	
-	public async open(url: string, timeout: number, protocols: string | string[]): Promise<void> {
+	public async open(url: string, timeout?: number, protocols?: string | string[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (this.socket !== null) {
                 reject('Socket is already open.');
@@ -25,7 +29,12 @@ export default class PromisedWebsocket {
             this.socket.onmessage = (e: MessageEvent): void => this.onMessage(e);
             this.socket.onclose = (e: CloseEvent): void => this.onClose();
 
-            this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
+            if (timeout === undefined) {
+                timeout = this.defaultTimeout;
+            }
+            if (timeout !== undefined) {
+                this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
+            }
         });
 	}
 	
@@ -42,20 +51,27 @@ export default class PromisedWebsocket {
 		});
 	}
 	
-	public async recv(timeout: number): Promise<any> {
+	public async recv(timeout?: number): Promise<any> {
 		return new Promise<any>((resolve, reject: any) : void => {
-            if (this.isPendingPromise()) {
-                reject('Another promise is pending.');
-                return;
-            }
             if (this.socket === null || this.socket.readyState !== 1) {
                 reject('Socket is not open.');
                 return;
             }
 
+            if (this.isPendingPromise()) {
+                reject('Another promise is pending.');
+                return;
+            }
+
             this.resolve = resolve;
             this.reject = reject;
-            this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
+
+            if (timeout === undefined) {
+                timeout = this.defaultTimeout;
+            }
+            if (timeout !== undefined) {
+                this.timeoutTimer = setTimeout((e: Event): void => this.onTimeout(), timeout);
+            }
 
             this.processRecv();
 		});
