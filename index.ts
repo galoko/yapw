@@ -10,7 +10,7 @@ export default class PromisedWebsocket {
     private reject: Function = EMPTY_FUNCTION;
     private defaultTimeout = 0;
 
-    PromisedWebsocket(defaultTimeout?: number): void {
+    constructor(defaultTimeout?: number) {
         if (defaultTimeout !== undefined) {
             this.defaultTimeout = defaultTimeout;
         }
