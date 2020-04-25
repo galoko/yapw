@@ -90,6 +90,10 @@ export default class PromisedWebsocket {
         });
     }
 
+    public connected(): boolean {
+        return this.socket !== null;
+    }
+
     // internals
 
     private isPendingPromise(): boolean {
@@ -129,6 +133,7 @@ export default class PromisedWebsocket {
     }
 
     private onClose(): void {
+        this.socket = null;
         this.resolve = EMPTY_FUNCTION;
         this.reject('Socket was disconnected.');
     }
